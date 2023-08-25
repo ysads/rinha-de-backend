@@ -1,0 +1,10 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+CREATE TABLE IF NOT EXISTS people (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nickname VARCHAR(32) UNIQUE NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  birthdate VARCHAR(10) NOT NULL,
+  stack VARCHAR(32)[]
+);
