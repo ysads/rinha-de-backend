@@ -1,8 +1,11 @@
 (ns rinha.core
   (:require [mount.core :as mount :refer [defstate]]
             [rinha.components.app :refer [app]]
-            [ring.adapter.jetty :as jetty])
+            [ring.adapter.jetty :as jetty]
+            [taoensso.timbre :as timbre])
   (:gen-class))
+
+(timbre/set-min-level! :info)
 
 (defstate http-server
   :start (let [port (if (System/getenv "PORT")

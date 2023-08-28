@@ -5,9 +5,12 @@
             [mount.core :refer [defstate]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
+            [ring.logger.timbre :refer [wrap-with-logger make-timbre-logger]]
+            [ring.logger :as logger]
             [ring.middleware.reload :refer [wrap-reload]]
             [rinha.models.person :as person]
-            [rinha.components.db :as db :refer [*db*]])
+            [rinha.components.db :as db :refer [*db*]]
+            [taoensso.timbre :as timbre])
   (:gen-class))
 
 (defn response
@@ -50,11 +53,32 @@
   (GET "/contagem-pessoas" [] count-people)
   (route/not-found "Not Found"))
 
+(defn redacted-key? [k]
+  (contains? #{:authorization :password :token :secret :secret-key :secret-token :pwd :pass} k))
+
+(defn redact-keys [body]
+  "Removes sensitive information from a request body by checking against a pre-defined set of keys."
+  (reduce (fn [acc [k v]]
+            (if (redacted-key? k)
+                acc
+                (assoc acc k v)))
+          {}
+          body))
+
+(defn wrap-with-request-body [handler]
+  (fn [request]
+    (let [body (:body request)]
+      (taoensso.timbre/info "Request body: " (if (map? body)
+                                               (redact-keys body)
+                                               body)))
+    (handler request)))
+
 (defstate app
   :start (-> app-routes
              api
-            ;;  wrap-reload
+             wrap-with-request-body ;; INFO: needs to come after wrap-json-body since it expects body to already be a map
              (wrap-json-body {:keywords? true :bigdecimals? true})
+             wrap-with-logger
              wrap-keyword-params
              wrap-json-response)
   :stop (println "[app] stopping. noop"))

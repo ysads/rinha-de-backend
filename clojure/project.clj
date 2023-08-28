@@ -3,13 +3,16 @@
   :url "http://example.com/FIXME"
   :min-lein-version "2.0.0"
   :main rinha.core
-  :dependencies [[compojure "1.6.1"]
+  :dependencies [[com.fzakaria/slf4j-timbre "0.4.0"]
+                 [com.taoensso/timbre "6.2.2"]
+                 [compojure "1.6.1"]
                  [conman "0.9.6"]
-                 [mount "0.1.17"] 
+                 [mount "0.1.17"]
                  [org.clojure/clojure "1.11.0"]
                  [org.clojure/java.jdbc "0.7.12"]
-                 [org.postgresql/postgresql "42.6.0"] 
+                 [org.postgresql/postgresql "42.6.0"]
                  [ring "1.9.0"]
+                 [ring-logger-timbre "0.7.6"]
                  [ring/ring-jetty-adapter "1.9.5"]
                  [ring/ring-defaults "0.3.2"]
                  [ring/ring-json "0.5.1"]]
