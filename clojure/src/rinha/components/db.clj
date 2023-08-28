@@ -1,8 +1,9 @@
 (ns rinha.components.db
   (:require [conman.core :as conman]
             [mount.core :refer [defstate]]
+            [next.jdbc.prepare :refer [SettableParameter]]
             [next.jdbc.result-set :refer [ReadableColumn]]
-            [next.jdbc.prepare :refer [SettableParameter]])
+            [rinha.components.env :refer [env]])
   (:gen-class))
 
 ;; Need to use env vars to work with production
@@ -10,10 +11,10 @@
                 :username "postgres"
                 :password "postgres"
                 :database-name "db_clj"
-                :server-name "localhost"
+                :server-name (or (:db-host env) "localhost")
                 :port-number 5432})
 
-(defstate ^:dynamic *db* 
+(defstate ^:dynamic *db*
   :start (conman/connect! pool-spec)
   :stop (conman/disconnect! *db*))
 

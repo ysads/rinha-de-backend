@@ -6,7 +6,7 @@
 
 GATLING_BIN_DIR=$HOME/gatling/3.9.5/bin
 
-WORKSPACE="$HOME/Documents/other/rinha-de-backend/stress-test/$1"
+WORKSPACE="$HOME/Documents/other/rinha-de-backend/$1/stress-test/"
 
 echo "Running Gatling for $WORKSPACE"
 

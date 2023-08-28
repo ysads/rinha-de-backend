@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   postgres:
@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=db_clj
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
@@ -18,6 +18,8 @@ services:
     # image: rinha-clj
     depends_on:
       - postgres
+    environment:
+      - DB_HOST=postgres
     ports:
       - "9999:9999"
 
@@ -25,7 +27,7 @@ services:
   #   build: .
   #   depends_on:
   #     - postgres
-  
+
   # nginx:
   #   image: nginx:latest
   #   volumes:
