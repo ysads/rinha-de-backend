@@ -14,4 +14,10 @@ SELECT * FROM people
 SELECT count(*) FROM people
 
 -- :name search-people :? :*
-SELECT nickname || '--' || name FROM people
+SELECT * FROM people
+WHERE search ILIKE :term
+
+-- :name explain-search-people :? :*
+EXPLAIN ANALYZE
+SELECT * FROM people
+WHERE search ILIKE :term
